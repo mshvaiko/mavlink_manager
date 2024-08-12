@@ -1,0 +1,4 @@
+pymavlink
+pyserial
+pyyaml
+pika
