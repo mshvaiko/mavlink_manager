@@ -1,1 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Local virtual environments
+.local/
+
+# Virtual env
 venv/

@@ -1,10 +1,13 @@
+# Description: This script calculates the real-world coordinates of a tracking point in meters, the azimuth angle to the zero point in degrees,
+# and the distance to the zero point in meters. The script also calculates the resulting relative drone azimuth to the zero point in degrees.
+# The script uses the camera's field of view, resolution, and the distance from the camera to the tracking point as input parameters.
 import math
 
 DIAGONAL_CAMERA_FOV = 55  # Field of view in degrees
 RESOLUTION_WIDTH = 720  # Width of the camera resolution in pixels
 RESOLUTION_HEIGHT = 1280  # Height of the camera resolution in pixels
 
-def calculate_real_coordinates(pixel_x, pixel_y, distance):
+def calculate_real_coordinates(pixel_x, pixel_y, attitude):
     global DIAGONAL_CAMERA_FOV, RESOLUTION_WIDTH, RESOLUTION_HEIGHT
 
     # Convert diagonal FOV from degrees to radians
@@ -26,8 +29,8 @@ def calculate_real_coordinates(pixel_x, pixel_y, distance):
     angle_y = pixel_y * angle_per_pixel_y
     
     # Calculate the real-world coordinates
-    real_x = round(distance * math.tan(angle_x), 2)
-    real_y = round(distance * math.tan(angle_y), 2)
+    real_x = round(attitude * math.tan(angle_x), 2)
+    real_y = round(attitude * math.tan(angle_y), 2)
     
     return real_x, real_y
 
@@ -57,16 +60,16 @@ def calculate_resulting_azimuth(drone_azimuth, target_azimuth):
     elif resulting_azimuth >= 360:
         resulting_azimuth -= 360
     
-    return resulting_azimuth
+    return round(resulting_azimuth, 2)
 
 def main():
     # Example usage
     x = -100  # x-coordinate of the tracking point in pixels
     y = 180  # y-coordinate of the tracking point in pixels
-    distance = 30  # Distance from the camera to the tracking point in meters
+    attitude = 30  # Distance from the camera to the tracking point in meters
     drone_azimuth = 90  # Azimuth angle of the drone in degrees
 
-    real_x, real_y = calculate_real_coordinates(x, y, distance)
+    real_x, real_y = calculate_real_coordinates(x, y, attitude)
     print(f"Real coordinates: ({real_x}, {real_y}) meters")
 
     azimuth, distance = calculate_azimuth_and_distance(real_x, real_y)
